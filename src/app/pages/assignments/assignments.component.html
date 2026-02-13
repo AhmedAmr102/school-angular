@@ -1,0 +1,61 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Assignments</h1>
+      <p>Manage assignments and grading</p>
+    </div>
+    <button mat-raised-button color="primary" *ngIf="authService.hasRole('Teacher') || authService.hasRole('Admin')" (click)="openCreateAssignment()">
+      <mat-icon>add</mat-icon>
+      New Assignment
+    </button>
+  </div>
+
+  <mat-card class="data-card">
+    <mat-card-content>
+      <p class="loading-state" *ngIf="isLoading">Loading assignments...</p>
+      <table mat-table [dataSource]="assignments" class="data-table">
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Title</th>
+          <td mat-cell *matCellDef="let a">
+            <div class="assignment-title">{{ a.title }}</div>
+            <div class="assignment-course" *ngIf="a.courseName">{{ a.courseName }}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="class">
+          <th mat-header-cell *matHeaderCellDef>Class</th>
+          <td mat-cell *matCellDef="let a">{{ a.className }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Due Date</th>
+          <td mat-cell *matCellDef="let a">{{ a.dueDate | date }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let a">
+            <mat-chip [color]="isOverdue(a.dueDate) ? 'warn' : 'primary'" selected>
+              {{ isOverdue(a.dueDate) ? 'Overdue' : 'Active' }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let a">
+            <button mat-icon-button color="primary" *ngIf="authService.hasRole('Student')" matTooltip="Submit" (click)="submitAssignment(a)">
+              <mat-icon>upload</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" *ngIf="authService.hasRole('Teacher') || authService.hasRole('Admin')" matTooltip="Grade Students" (click)="editAssignment(a)">
+              <mat-icon>grading</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

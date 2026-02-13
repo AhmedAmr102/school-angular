@@ -1,0 +1,81 @@
+.page-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+  }
+
+  p {
+    color: #6b7280;
+    margin: 4px 0 0;
+  }
+}
+
+.data-card {
+  border-radius: 16px;
+}
+
+.loading-state,
+.empty-state {
+  margin: 16px 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+
+  th {
+    font-weight: 600;
+    color: #374151;
+  }
+
+  td {
+    color: #4b5563;
+  }
+
+  .mat-column-id {
+    max-width: 180px;
+    word-break: break-all;
+    font-size: 12px;
+  }
+
+  .mat-column-subjects,
+  .mat-column-classes,
+  .mat-column-teachers {
+    max-width: 280px;
+    white-space: normal;
+    line-height: 1.4;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  button[mat-stroked-button] {
+    min-width: 110px;
+  }
+
+  mat-icon {
+    margin-right: 4px;
+  }
+}

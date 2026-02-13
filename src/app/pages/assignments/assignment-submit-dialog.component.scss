@@ -1,0 +1,31 @@
+.content {
+  min-width: 440px;
+  max-width: 100%;
+}
+
+.title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.sub {
+  margin: 4px 0 14px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.file-picker {
+  margin: 8px 0;
+}
+
+.selected {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #374151;
+}
+
+@media (max-width: 640px) {
+  .content {
+    min-width: 0;
+  }
+}

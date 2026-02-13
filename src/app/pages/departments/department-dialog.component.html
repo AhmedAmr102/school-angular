@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>{{ data ? 'Edit' : 'Add' }} Department</h2>
+<mat-dialog-content>
+  <form [formGroup]="deptForm" class="dept-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Department Name" />
+      <mat-error *ngIf="deptForm.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" placeholder="Description"></textarea>
+      <mat-error *ngIf="deptForm.get('description')?.hasError('required')">Description is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Head of Department</mat-label>
+      <mat-select formControlName="headDepartmentId">
+        <mat-option value="">Not Assigned</mat-option>
+        <mat-option *ngFor="let user of teachers" [value]="user.id">
+          {{ user.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="deptForm.invalid || isLoading" (click)="onSubmit()">
+    {{ data ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>

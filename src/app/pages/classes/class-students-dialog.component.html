@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>{{ data.name }} Details</h2>
+<mat-dialog-content>
+  <div class="meta">
+    <p><strong>Department:</strong> {{ data.departmentName || 'Not Set' }}</p>
+    <p><strong>Semester:</strong> {{ data.semester }}</p>
+  </div>
+
+  <p class="empty" *ngIf="isLoading">Loading subject setup...</p>
+  <p class="empty" *ngIf="!isLoading && setups.length === 0">No subject setup found for this class yet.</p>
+
+  <mat-list *ngIf="!isLoading && setups.length > 0">
+    <mat-list-item *ngFor="let setup of setups">
+      <mat-icon matListItemIcon>menu_book</mat-icon>
+      <span matListItemTitle>{{ setup.courseName }}</span>
+      <span matListItemLine>Teachers: {{ setup.teacherNames.length ? setup.teacherNames.join(', ') : 'Not Assigned' }}</span>
+      <span matListItemLine>Students: {{ setup.studentNames.length }}</span>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

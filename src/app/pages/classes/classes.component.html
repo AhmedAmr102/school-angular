@@ -1,0 +1,93 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Classes</h1>
+      <p>Create classes by department, then configure subjects, teachers, and students</p>
+    </div>
+    <button mat-raised-button color="primary" *ngIf="authService.hasRole('Teacher') || authService.hasRole('Admin')" (click)="openAddClass()">
+      <mat-icon>add</mat-icon>
+      Add Class
+    </button>
+  </div>
+
+  <mat-card class="data-card">
+    <mat-card-content>
+      <p class="loading-state" *ngIf="isLoading">Loading classes...</p>
+      <table mat-table [dataSource]="classes" class="data-table">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let c">{{ c.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="department">
+          <th mat-header-cell *matHeaderCellDef>Department</th>
+          <td mat-cell *matCellDef="let c">{{ c.departmentName || 'Not Set' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="course">
+          <th mat-header-cell *matHeaderCellDef>Subject</th>
+          <td mat-cell *matCellDef="let c">{{ getSubjectsLabel(c) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="semester">
+          <th mat-header-cell *matHeaderCellDef>Semester</th>
+          <td mat-cell *matCellDef="let c">{{ c.semester }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="teacher">
+          <th mat-header-cell *matHeaderCellDef>Teacher</th>
+          <td mat-cell *matCellDef="let c">{{ getTeachersLabel(c) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="students">
+          <th mat-header-cell *matHeaderCellDef>Students</th>
+          <td mat-cell *matCellDef="let c">{{ getStudentsCount(c) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="setup">
+          <th mat-header-cell *matHeaderCellDef>Setup</th>
+          <td mat-cell *matCellDef="let c">{{ getSetupStatusLabel(c) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let c">
+            <mat-chip [color]="c.isActive ? 'primary' : 'warn'" selected>
+              {{ c.isActive ? 'Active' : 'Inactive' }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let c">
+            <button mat-icon-button color="primary" (click)="viewClass(c)"><mat-icon>visibility</mat-icon></button>
+            <button
+              mat-icon-button
+              color="primary"
+              *ngIf="authService.hasRole('Teacher') || authService.hasRole('Admin')"
+              matTooltip="Configure subject, teacher, and students"
+              (click)="openAcademicSetup(c)">
+              <mat-icon>tune</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="primary"
+              *ngIf="authService.hasRole('Teacher') || authService.hasRole('Admin')"
+              matTooltip="Assign a specific student to specific subjects"
+              (click)="openStudentEnrollment(c)">
+              <mat-icon>person_add</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" *ngIf="authService.hasRole('Teacher') || authService.hasRole('Admin')" (click)="editClass(c)"><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button color="warn" *ngIf="authService.hasRole('Teacher') || authService.hasRole('Admin')" (click)="deleteClass(c)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

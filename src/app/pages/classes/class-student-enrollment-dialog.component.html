@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Student Subject Enrollment - {{ classItem.name }}</h2>
+<mat-dialog-content>
+  <p class="hint">Pick one student, then choose which subjects this student studies in this class.</p>
+  <p class="warning" *ngIf="guardMessage">{{ guardMessage }}</p>
+
+  <form [formGroup]="form" class="dialog-form" *ngIf="!guardMessage">
+    <mat-form-field appearance="outline">
+      <mat-label>Student</mat-label>
+      <mat-select formControlName="studentId">
+        <mat-option *ngFor="let student of students" [value]="student.id">
+          {{ student.name }} ({{ student.userName }}) - ID: {{ student.id }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('studentId')?.hasError('required')">Student is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Subjects for this student</mat-label>
+      <mat-select formControlName="courseIds" multiple>
+        <mat-option *ngFor="let setup of setups" [value]="setup.courseId">
+          {{ setup.courseName }} - Teachers: {{ setup.teacherNames.length ? setup.teacherNames.join(', ') : 'Not Assigned' }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="isLoading || form.invalid || !!guardMessage" (click)="save()">
+    Save
+  </button>
+</mat-dialog-actions>

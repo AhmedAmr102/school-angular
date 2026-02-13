@@ -1,0 +1,182 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>User Management</h1>
+      <p>Manage teacher/student accounts and student academic mapping</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openCreateUser()">
+      <mat-icon>person_add</mat-icon>
+      Create User
+    </button>
+  </div>
+
+  <mat-card class="data-card">
+    <mat-card-content>
+      <p *ngIf="isLoading" class="loading-state">Loading users...</p>
+
+      <mat-tab-group *ngIf="!isLoading" dynamicHeight>
+        <mat-tab label="Teachers ({{ teachers.length }})">
+          <div class="table-wrapper" *ngIf="teachers.length > 0; else emptyTeachers">
+            <table mat-table [dataSource]="teachers" class="data-table">
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let u">{{ u.id }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="userName">
+                <th mat-header-cell *matHeaderCellDef>Username</th>
+                <td mat-cell *matCellDef="let u">{{ u.userName }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let u">{{ u.name }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>Email</th>
+                <td mat-cell *matCellDef="let u">{{ u.email }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let u">
+                  <mat-chip [color]="getStatusColor(u.isActive)" selected>{{ getStatusLabel(u.isActive) }}</mat-chip>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let u">
+                  <div class="actions">
+                    <button
+                      mat-stroked-button
+                      color="primary"
+                      *ngIf="!u.isActive"
+                      (click)="setUserActive(u, true)"
+                      [disabled]="isBusy(u)">
+                      <mat-icon>{{ isBusy(u) ? 'hourglass_top' : 'check_circle' }}</mat-icon>
+                      Activate
+                    </button>
+
+                    <button
+                      mat-stroked-button
+                      color="warn"
+                      *ngIf="u.isActive"
+                      (click)="setUserActive(u, false)"
+                      [disabled]="isBusy(u)">
+                      <mat-icon>{{ isBusy(u) ? 'hourglass_top' : 'block' }}</mat-icon>
+                      Deactivate
+                    </button>
+
+                    <button mat-icon-button color="warn" (click)="deleteUser(u)" [disabled]="isBusy(u)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="teacherDisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: teacherDisplayedColumns"></tr>
+            </table>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Students ({{ students.length }})">
+          <div class="table-wrapper" *ngIf="students.length > 0; else emptyStudents">
+            <table mat-table [dataSource]="students" class="data-table">
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let u">{{ u.id }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="userName">
+                <th mat-header-cell *matHeaderCellDef>Username</th>
+                <td mat-cell *matCellDef="let u">{{ u.userName }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let u">{{ u.name }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>Email</th>
+                <td mat-cell *matCellDef="let u">{{ u.email }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let u">
+                  <mat-chip [color]="getStatusColor(u.isActive)" selected>{{ getStatusLabel(u.isActive) }}</mat-chip>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="semester">
+                <th mat-header-cell *matHeaderCellDef>Current Year</th>
+                <td mat-cell *matCellDef="let u">{{ getStudentSemesterLabel(u.id) }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="classes">
+                <th mat-header-cell *matHeaderCellDef>Classes</th>
+                <td mat-cell *matCellDef="let u">{{ getStudentClassesLabel(u.id) }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="subjects">
+                <th mat-header-cell *matHeaderCellDef>Subjects</th>
+                <td mat-cell *matCellDef="let u">{{ getStudentSubjectsLabel(u.id) }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="teachers">
+                <th mat-header-cell *matHeaderCellDef>Teachers</th>
+                <td mat-cell *matCellDef="let u">{{ getStudentTeachersLabel(u.id) }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let u">
+                  <div class="actions">
+                    <button
+                      mat-stroked-button
+                      color="primary"
+                      *ngIf="!u.isActive"
+                      (click)="setUserActive(u, true)"
+                      [disabled]="isBusy(u)">
+                      <mat-icon>{{ isBusy(u) ? 'hourglass_top' : 'check_circle' }}</mat-icon>
+                      Activate
+                    </button>
+
+                    <button
+                      mat-stroked-button
+                      color="warn"
+                      *ngIf="u.isActive"
+                      (click)="setUserActive(u, false)"
+                      [disabled]="isBusy(u)">
+                      <mat-icon>{{ isBusy(u) ? 'hourglass_top' : 'block' }}</mat-icon>
+                      Deactivate
+                    </button>
+
+                    <button mat-icon-button color="warn" (click)="deleteUser(u)" [disabled]="isBusy(u)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="studentDisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: studentDisplayedColumns"></tr>
+            </table>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+      <ng-template #emptyTeachers>
+        <p class="empty-state">No teachers found.</p>
+      </ng-template>
+
+      <ng-template #emptyStudents>
+        <p class="empty-state">No students found.</p>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</div>

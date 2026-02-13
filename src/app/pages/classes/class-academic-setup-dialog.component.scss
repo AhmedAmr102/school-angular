@@ -1,0 +1,59 @@
+.hint {
+  margin: 0 0 12px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.warning {
+  margin: 0 0 12px;
+  color: #b45309;
+  font-size: 13px;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 520px;
+  max-width: 100%;
+}
+
+.offering-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.offering-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.offering-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+  }
+}
+
+@media (max-width: 760px) {
+  .dialog-form {
+    min-width: 0;
+  }
+
+  .offering-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

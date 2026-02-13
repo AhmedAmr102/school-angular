@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>Create Assignment</h2>
+<mat-dialog-content>
+  <form [formGroup]="assignmentForm" class="dialog-form">
+    <p class="hint" *ngIf="assignableClasses.length === 0">
+      No class has a subject assigned yet. Configure class academic setup first.
+    </p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" placeholder="Assignment title" />
+      <mat-error *ngIf="assignmentForm.get('title')?.hasError('required')">Title is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput rows="4" formControlName="description" placeholder="What should students do?"></textarea>
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Due Date</mat-label>
+        <input matInput type="date" formControlName="dueDate" />
+        <mat-error *ngIf="assignmentForm.get('dueDate')?.hasError('required')">Due date is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Class</mat-label>
+        <mat-select formControlName="classId">
+          <mat-option *ngFor="let classItem of assignableClasses" [value]="classItem.id">
+            {{ classItem.name }} <span *ngIf="classItem.courseName">- {{ classItem.courseName }}</span>
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="assignmentForm.get('classId')?.hasError('required')">Class is required</mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="isLoading || assignmentForm.invalid || assignableClasses.length === 0" (click)="onSubmit()">
+    {{ isLoading ? 'Saving...' : 'Create' }}
+  </button>
+</mat-dialog-actions>

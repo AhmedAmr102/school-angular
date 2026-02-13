@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Submit Assignment</h2>
+<mat-dialog-content class="content">
+  <p class="title">{{ assignment.title }}</p>
+  <p class="sub">{{ assignment.className }}</p>
+
+  <div class="file-picker">
+    <input type="file" (change)="onFileChange($event)" />
+  </div>
+
+  <p class="selected" *ngIf="selectedFile">
+    Selected: {{ selectedFile.name }}
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="isSubmitting || !selectedFile" (click)="submit()">
+    {{ isSubmitting ? 'Uploading...' : 'Submit' }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>{{ data ? 'Edit Class' : 'Create Class' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="classForm" class="dialog-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Class Name</mat-label>
+      <input matInput formControlName="name" placeholder="e.g. CS-Section A" />
+      <mat-error *ngIf="classForm.get('name')?.hasError('required')">Class name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Department / Stage</mat-label>
+      <mat-select formControlName="departmentId">
+        <mat-option *ngFor="let department of departments" [value]="department.id">
+          {{ department.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="classForm.get('departmentId')?.hasError('required')">Department is required</mat-error>
+    </mat-form-field>
+    <p class="hint">You can assign subject, teacher, and students after creating the class.</p>
+    <p class="warning" *ngIf="!data && createGuardMessage">{{ createGuardMessage }}</p>
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Semester</mat-label>
+        <mat-select formControlName="semester">
+          <mat-option *ngFor="let semester of semesters" [value]="semester">Semester {{ semester }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Start Date</mat-label>
+        <input matInput type="date" formControlName="startDate" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>End Date</mat-label>
+        <input matInput type="date" formControlName="endDate" />
+      </mat-form-field>
+    </div>
+
+    <mat-slide-toggle formControlName="isActive" color="primary">Class Active</mat-slide-toggle>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="isLoading || classForm.invalid || !canCreateClass" (click)="onSubmit()">
+    {{ data ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>

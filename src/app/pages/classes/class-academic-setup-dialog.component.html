@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Academic Setup for {{ data.name }}</h2>
+<mat-dialog-content>
+  <p class="hint">
+    Add one or more subjects for this class, then pick teachers. Student enrollment is managed from the student assignment list in Classes.
+  </p>
+  <p class="warning" *ngIf="setupGuardMessage">{{ setupGuardMessage }}</p>
+  <p class="warning" *ngIf="!setupGuardMessage && duplicateCourseWarning">{{ duplicateCourseWarning }}</p>
+
+  <form [formGroup]="setupForm" class="dialog-form">
+    <div formArrayName="offerings" class="offering-list">
+      <div
+        class="offering-card"
+        *ngFor="let offering of offerings.controls; let i = index; trackBy: trackByIndex"
+        [formGroupName]="i">
+        <div class="offering-header">
+          <h3>Subject {{ i + 1 }}</h3>
+          <button mat-stroked-button color="warn" type="button" (click)="removeOffering(i)" [disabled]="offerings.length <= 1">
+            Remove
+          </button>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Subject / Course</mat-label>
+          <mat-select formControlName="courseId">
+            <mat-option *ngFor="let course of courses" [value]="course.id">
+              {{ course.code }} - {{ course.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="offering.get('courseId')?.hasError('required')">Subject is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Teachers for this subject</mat-label>
+          <mat-select formControlName="teacherIds" multiple>
+            <mat-option *ngFor="let teacher of teachers" [value]="teacher.id">
+              {{ teacher.name }} ({{ teacher.userName }})
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="offering.get('teacherIds')?.hasError('required')">At least one teacher is required</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <button mat-stroked-button color="primary" type="button" (click)="addOffering()">
+      + Add Another Subject
+    </button>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="isLoading || setupForm.invalid || !!setupGuardMessage || !!duplicateCourseWarning" (click)="save()">
+    Save
+  </button>
+</mat-dialog-actions>

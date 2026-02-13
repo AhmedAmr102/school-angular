@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Mark Attendance</h2>
+<mat-dialog-content>
+  <p class="class-name">{{ classItem.name }}</p>
+
+  <p class="empty" *ngIf="!classItem.students?.length">No students are assigned to this class.</p>
+
+  <form [formGroup]="attendanceForm" class="dialog-form" *ngIf="classItem.students?.length">
+    <mat-form-field appearance="outline">
+      <mat-label>Student</mat-label>
+      <mat-select formControlName="studentId">
+        <mat-option *ngFor="let student of classItem.students" [value]="student.studentId">
+          {{ student.studentName }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="attendanceForm.get('studentId')?.hasError('required')">Student is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let status of statuses" [value]="status.value">
+          {{ status.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="isLoading || !classItem.students?.length" (click)="save()">
+    {{ isLoading ? 'Saving...' : 'Save' }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,23 @@
+.class-name {
+  margin: 0 0 12px;
+  font-weight: 600;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 360px;
+  max-width: 100%;
+}
+
+.empty {
+  margin: 0;
+  color: #6b7280;
+}
+
+@media (max-width: 640px) {
+  .dialog-form {
+    min-width: 0;
+  }
+}

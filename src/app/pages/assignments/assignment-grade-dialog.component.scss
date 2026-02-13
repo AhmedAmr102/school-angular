@@ -1,0 +1,62 @@
+.content {
+  min-width: 900px;
+  max-width: 100%;
+}
+
+.assignment-meta {
+  margin-bottom: 12px;
+}
+
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.sub {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #6b7280;
+  padding: 16px 0;
+}
+
+.empty {
+  color: #6b7280;
+  margin: 16px 0;
+}
+
+.data-table {
+  width: 100%;
+}
+
+.student-name {
+  font-weight: 600;
+}
+
+.student-id {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.grade-field {
+  width: 110px;
+  margin-top: 8px;
+}
+
+.remarks-field {
+  width: 100%;
+  margin-top: 8px;
+}
+
+@media (max-width: 1100px) {
+  .content {
+    min-width: 0;
+  }
+}

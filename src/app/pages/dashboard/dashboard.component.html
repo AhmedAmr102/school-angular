@@ -1,0 +1,139 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="greeting">{{ getGreeting() }}, {{ (user?.name || '').split(' ')[0] }}!</h1>
+      <p class="subtitle">Here's what's happening in your school today</p>
+    </div>
+    <div class="current-time">
+      <mat-icon>schedule</mat-icon>
+      <span>{{ currentTime | date:'EEEE, MMMM d, y, h:mm a' }}</span>
+    </div>
+  </div>
+
+  <div class="stats-loading" *ngIf="statsLoading">Loading live statistics...</div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid" *ngIf="!statsLoading">
+    <mat-card *ngFor="let stat of stats" class="stat-card card-hover" [class]="stat.color">
+      <div class="stat-content">
+        <div class="stat-info">
+          <p class="stat-title">{{ stat.title }}</p>
+          <p class="stat-value">{{ stat.value }}</p>
+          <p class="stat-description">{{ stat.description }}</p>
+          <div *ngIf="stat.trend" class="stat-trend" [class.positive]="stat.trendUp" [class.negative]="!stat.trendUp">
+            <mat-icon>{{ stat.trendUp ? 'trending_up' : 'trending_down' }}</mat-icon>
+            <span>{{ stat.trend }}</span>
+          </div>
+        </div>
+        <div class="stat-icon-wrapper">
+          <mat-icon>{{ stat.icon }}</mat-icon>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Recent Activity -->
+    <mat-card class="activity-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>history</mat-icon>
+          Recent Activity
+        </mat-card-title>
+        <button mat-button color="primary" (click)="viewAllActivity()">View All</button>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="activity-list">
+          <div *ngFor="let activity of activities; let last = last" class="activity-item">
+            <div class="activity-icon" [class]="activity.type">
+              <mat-icon>{{ getActivityIcon(activity.type) }}</mat-icon>
+            </div>
+            <div class="activity-details">
+              <p class="activity-title">{{ activity.title }}</p>
+              <p class="activity-description">{{ activity.description }}</p>
+              <p class="activity-time">{{ activity.time }}</p>
+            </div>
+            <mat-divider *ngIf="!last"></mat-divider>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Side Panel -->
+    <div class="side-panel">
+      <!-- Upcoming Events -->
+      <mat-card class="events-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>event</mat-icon>
+            Upcoming Events
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="event-list">
+            <div *ngFor="let event of events" class="event-item">
+              <div class="event-icon">
+                <mat-icon>calendar_today</mat-icon>
+              </div>
+              <div class="event-details">
+                <p class="event-title">{{ event.title }}</p>
+                <p class="event-date">{{ event.date }}</p>
+                <p class="event-location">{{ event.location }}</p>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Quick Actions -->
+      <mat-card class="actions-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>flash_on</mat-icon>
+            Quick Actions
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="actions-grid">
+            <ng-container *ngIf="authService.hasRole('Admin')">
+              <button mat-stroked-button class="action-btn" (click)="goTo('/users')">
+                <mat-icon>group</mat-icon>
+                <span>Manage Users</span>
+              </button>
+              <button mat-stroked-button class="action-btn" (click)="goTo('/register')">
+                <mat-icon>person_add</mat-icon>
+                <span>Create User</span>
+              </button>
+              <button mat-stroked-button class="action-btn" (click)="goTo('/courses')">
+                <mat-icon>menu_book</mat-icon>
+                <span>Manage Courses</span>
+              </button>
+            </ng-container>
+            <ng-container *ngIf="authService.hasRole('Teacher')">
+              <button mat-stroked-button class="action-btn" (click)="goTo('/assignments')">
+                <mat-icon>assignment</mat-icon>
+                <span>New Assignment</span>
+              </button>
+              <button mat-stroked-button class="action-btn" (click)="goTo('/attendance')">
+                <mat-icon>check_circle</mat-icon>
+                <span>Attendance</span>
+              </button>
+            </ng-container>
+            <ng-container *ngIf="authService.hasRole('Student')">
+              <button mat-stroked-button class="action-btn" (click)="goTo('/assignments')">
+                <mat-icon>assignment</mat-icon>
+                <span>Assignments</span>
+              </button>
+              <button mat-stroked-button class="action-btn" (click)="goTo('/grades')">
+                <mat-icon>grade</mat-icon>
+                <span>Grades</span>
+              </button>
+            </ng-container>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

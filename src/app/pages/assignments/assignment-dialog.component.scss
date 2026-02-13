@@ -1,0 +1,29 @@
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 520px;
+  max-width: 100%;
+}
+
+.hint {
+  margin: 0;
+  color: #b45309;
+  font-size: 13px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 760px) {
+  .dialog-form {
+    min-width: 0;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

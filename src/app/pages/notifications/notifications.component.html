@@ -1,0 +1,25 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Notifications</h1>
+      <p>Stay updated with important alerts</p>
+    </div>
+    <button mat-button color="primary" (click)="markAllRead()"><mat-icon>done_all</mat-icon>Mark All Read</button>
+  </div>
+
+  <mat-card class="notifications-card">
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let notification of notifications" class="notification-item" [class.unread]="!notification.isRead">
+          <mat-icon matListItemIcon [class]="notification.type">{{ getIcon(notification.type) }}</mat-icon>
+          <div matListItemTitle>{{ notification.title }}</div>
+          <div matListItemLine>{{ notification.message }}</div>
+          <div matListItemMeta>
+            <span class="time">{{ notification.createdAt | date:'short' }}</span>
+            <mat-icon *ngIf="!notification.isRead" class="unread-dot">fiber_manual_record</mat-icon>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>

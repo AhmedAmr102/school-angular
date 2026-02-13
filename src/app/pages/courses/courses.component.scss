@@ -1,0 +1,47 @@
+.page-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+  }
+
+  p {
+    color: #6b7280;
+    margin: 4px 0 0;
+  }
+}
+
+.data-card {
+  border-radius: 16px;
+}
+
+.data-table {
+  width: 100%;
+
+  th {
+    font-weight: 600;
+    color: #374151;
+  }
+
+  td {
+    color: #4b5563;
+  }
+
+  .mat-column-teachers {
+    max-width: 320px;
+    white-space: normal;
+    line-height: 1.4;
+  }
+}

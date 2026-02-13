@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>{{ data ? 'Edit' : 'Add' }} Course</h2>
+<mat-dialog-content>
+  <form [formGroup]="courseForm" class="dialog-form">
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Code</mat-label>
+        <input matInput formControlName="code" placeholder="CS101" />
+        <mat-error *ngIf="courseForm.get('code')?.hasError('required')">Code is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Credits</mat-label>
+        <input matInput type="number" formControlName="credits" />
+        <mat-error *ngIf="courseForm.get('credits')?.hasError('required')">Credits required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Introduction to Computer Science" />
+      <mat-error *ngIf="courseForm.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Department</mat-label>
+      <mat-select formControlName="departmentId">
+        <mat-option *ngFor="let dept of departments" [value]="dept.id">
+          {{ dept.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="courseForm.get('departmentId')?.hasError('required')">Department is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" placeholder="Course Description"></textarea>
+      <mat-error *ngIf="courseForm.get('description')?.hasError('required')">Description is required</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="courseForm.invalid || isLoading" (click)="onSubmit()">
+    {{ data ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>

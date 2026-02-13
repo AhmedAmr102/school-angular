@@ -1,0 +1,40 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Academic Calendar</h1>
+      <p>View important dates and events</p>
+    </div>
+    <div class="calendar-nav">
+      <button mat-icon-button (click)="previousMonth()"><mat-icon>chevron_left</mat-icon></button>
+      <span class="month-year">{{ currentDate | date:'MMMM yyyy' }}</span>
+      <button mat-icon-button (click)="nextMonth()"><mat-icon>chevron_right</mat-icon></button>
+    </div>
+  </div>
+
+  <mat-card class="calendar-card">
+    <mat-card-content>
+      <div class="calendar-grid">
+        <div class="day-header" *ngFor="let day of weekDays">{{ day }}</div>
+        <div class="day-cell" *ngFor="let day of calendarDays" [class.today]="day.isToday" [class.other-month]="day.isOtherMonth">
+          <span class="day-number">{{ day.date }}</span>
+          <div class="events" *ngIf="day.events.length > 0">
+            <div class="event-dot" *ngFor="let event of day.events" [style.background]="event.color" [matTooltip]="event.title"></div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="upcoming-events">
+    <h3>Upcoming Events</h3>
+    <div class="event-list">
+      <div class="event-item" *ngFor="let event of upcomingEvents">
+        <div class="event-color" [style.background]="event.color"></div>
+        <div class="event-info">
+          <span class="event-title">{{ event.title }}</span>
+          <span class="event-date">{{ event.date | date:'MMM d, y' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

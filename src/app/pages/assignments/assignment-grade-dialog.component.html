@@ -1,0 +1,64 @@
+<h2 mat-dialog-title>Grade Assignment</h2>
+<mat-dialog-content class="content">
+  <div class="assignment-meta">
+    <p class="title">{{ assignment.title }}</p>
+    <p class="sub">{{ assignment.className }} <span *ngIf="assignment.courseName">- {{ assignment.courseName }}</span></p>
+  </div>
+
+  <div class="loading" *ngIf="isLoading">
+    <mat-spinner diameter="28"></mat-spinner>
+    <span>Loading students...</span>
+  </div>
+
+  <p class="empty" *ngIf="!isLoading && students.length === 0">No students found for this class.</p>
+
+  <table mat-table [dataSource]="students" class="data-table" *ngIf="!isLoading && students.length > 0">
+    <ng-container matColumnDef="student">
+      <th mat-header-cell *matHeaderCellDef>Student</th>
+      <td mat-cell *matCellDef="let s">
+        <div class="student-name">{{ s.studentName }}</div>
+        <div class="student-id">{{ s.studentId }}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="grade">
+      <th mat-header-cell *matHeaderCellDef>Grade</th>
+      <td mat-cell *matCellDef="let s">
+        <mat-form-field appearance="outline" class="grade-field">
+          <input matInput type="number" min="0" max="100" [(ngModel)]="s.grade" />
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="remarks">
+      <th mat-header-cell *matHeaderCellDef>Remarks</th>
+      <td mat-cell *matCellDef="let s">
+        <mat-form-field appearance="outline" class="remarks-field">
+          <input matInput [(ngModel)]="s.remarks" />
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="visible">
+      <th mat-header-cell *matHeaderCellDef>Show to Student</th>
+      <td mat-cell *matCellDef="let s">
+        <mat-slide-toggle color="primary" [(ngModel)]="s.isVisibleToStudent"></mat-slide-toggle>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Save</th>
+      <td mat-cell *matCellDef="let s">
+        <button mat-raised-button color="primary" [disabled]="isSaving(s.studentId)" (click)="saveStudent(s)">
+          {{ isSaving(s.studentId) ? 'Saving...' : 'Save' }}
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Done</button>
+</mat-dialog-actions>

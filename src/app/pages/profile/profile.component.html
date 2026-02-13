@@ -1,0 +1,21 @@
+<div class="page-container">
+  <mat-card class="profile-card">
+    <mat-card-header>
+      <mat-card-title>My Profile</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="profile-row">
+        <mat-icon>person</mat-icon>
+        <span>{{ authService.getCurrentUser()?.name }}</span>
+      </div>
+      <div class="profile-row">
+        <mat-icon>mail</mat-icon>
+        <span>{{ authService.getCurrentUser()?.email }}</span>
+      </div>
+      <div class="profile-row">
+        <mat-icon>badge</mat-icon>
+        <span>{{ authService.getCurrentUser()?.role }}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

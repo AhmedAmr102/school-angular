@@ -1,0 +1,128 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="'navigation'"
+    [mode]="'side'"
+    [opened]="true"
+    [class.collapsed]="isCollapsed">
+    <div class="logo-section" [class.collapsed]="isCollapsed">
+      <div class="logo-icon">
+        <mat-icon>school</mat-icon>
+      </div>
+      <div class="logo-text" *ngIf="!isCollapsed">
+        <span class="logo-title">EduManage</span>
+        <span class="logo-subtitle">School System</span>
+      </div>
+      <button mat-icon-button class="collapse-btn" (click)="toggleCollapse()" *ngIf="!isCollapsed">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+    </div>
+
+    <mat-nav-list class="nav-list">
+      <a
+        mat-list-item
+        *ngFor="let item of filteredNavItems"
+        [routerLink]="item.route"
+        routerLinkActive="active-link"
+        [matTooltip]="isCollapsed ? item.title : ''"
+        [matTooltipPosition]="'right'">
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle *ngIf="!isCollapsed">{{ item.title }}</span>
+      </a>
+    </mat-nav-list>
+
+    <div class="user-section" [class.collapsed]="isCollapsed">
+      <div class="user-info" *ngIf="user">
+        <div class="user-avatar">
+          {{ getInitials(user.name) }}
+        </div>
+        <div class="user-details" *ngIf="!isCollapsed">
+          <span class="user-name">{{ user.name }}</span>
+          <span class="user-role">{{ user.role }}</span>
+        </div>
+      </div>
+      <button mat-stroked-button color="warn" class="logout-btn" (click)="logout()" [class.collapsed]="isCollapsed">
+        <mat-icon>logout</mat-icon>
+        <span *ngIf="!isCollapsed">Logout</span>
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content [class.collapsed]="isCollapsed">
+    <mat-toolbar class="top-toolbar">
+      <button mat-icon-button (click)="drawer.toggle()" class="menu-btn">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input
+          type="text"
+          [placeholder]="searchPlaceholder"
+          [(ngModel)]="searchText"
+          [disabled]="!searchEnabled"
+          (keyup.enter)="onSearchSubmit()" />
+        <button mat-icon-button type="button" (click)="onSearchSubmit()" [disabled]="!searchEnabled">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+        <button mat-icon-button type="button" (click)="clearSearch()" [disabled]="!searchEnabled || !searchText">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="toolbar-actions">
+        <button mat-icon-button [matMenuTriggerFor]="notificationsMenu">
+          <mat-icon [matBadge]="3" matBadgeColor="warn">notifications</mat-icon>
+        </button>
+        <mat-menu #notificationsMenu="matMenu">
+          <div class="notification-menu">
+            <h3>Notifications</h3>
+            <mat-divider></mat-divider>
+            <div class="notification-item">
+              <mat-icon color="primary">assignment</mat-icon>
+              <div>
+                <p>New assignment posted</p>
+                <small>5 minutes ago</small>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="notification-item">
+              <mat-icon color="accent">grade</mat-icon>
+              <div>
+                <p>Grade published</p>
+                <small>1 hour ago</small>
+              </div>
+            </div>
+          </div>
+        </mat-menu>
+
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+          <div class="toolbar-avatar">
+            {{ getInitials(user?.name || '') }}
+          </div>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item routerLink="/settings">
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
