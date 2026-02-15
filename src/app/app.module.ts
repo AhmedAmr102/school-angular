@@ -15,7 +15,8 @@ import { routes } from './app.routes';
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(routes),
+    // Use hash URLs to avoid 404s on GitHub Pages route refreshes.
+    RouterModule.forRoot(routes, { useHash: true }),
     MatSnackBarModule,
     MatDialogModule
   ],
